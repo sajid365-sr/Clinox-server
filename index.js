@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
+const services = require('./services.json');
 
 // MongoDB Connection
 
@@ -20,7 +20,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const run = async() =>{
     try{
         const serviceCollection = client.db("Clinox").collection('Services');
-        
+
 
 
     }
@@ -34,17 +34,6 @@ run().catch(console.dir);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Default Root
 app.get('/', (req, res) =>{
     res.send('Server is Running');
@@ -52,7 +41,8 @@ app.get('/', (req, res) =>{
 
 // All services
 app.get('/services', (req, res) =>{
-
+    res.send(services)
+    
 })
 
 // JW Token
