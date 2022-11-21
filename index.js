@@ -67,6 +67,33 @@ const run = async() =>{
         res.send(result);
     })
 
+    // Update review by specific review id
+    app.put('/reviews/:id', async(req, res) =>{
+        const reviewId = req.params.id;
+        const updatedFeedback = req.body.feedback;
+
+        const query = { _id: ObjectId(reviewId) };
+        const options = { upsert: true };
+        const updateDoc = {
+            $set : {
+                feedback : updatedFeedback,
+            }
+        }
+        const result = await reviewCollection.updateOne(query, updateDoc, options)
+        
+        res.send(result);
+    })
+
+    // Find specific review by review id
+    app.get('/editReviews/:id', async(req, res) =>{
+        const reviewId = req.params.id;
+        const query = { _id: ObjectId(reviewId) };
+        const cursor = reviewCollection.find(query);
+        const result = await cursor.toArray();
+
+        res.send(result);
+    })
+
     // Find all review by specific email
     app.post('/userEmail', async(req, res) =>{
         const userEmail = req.body.email;
