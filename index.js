@@ -1,14 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 const app = express();
+require("dotenv").config();
+
+
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
 
 // MongoDB Connection
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.90qadcl.mongodb.net/?retryWrites=true&w=majority`;
@@ -18,6 +22,9 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
+
+
+// Verify JW TOKEN
 const verifyJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -115,6 +122,16 @@ const run = async () => {
 
       res.send(result);
     });
+
+    // Add service
+    app.post('/addService', async(req, res) =>{
+        const formData = req.body;
+        const result = await serviceCollection.insertOne(formData);
+
+        res.send(result);
+        
+    })
+
 
     // Find specific review by review id
     app.get("/editReviews/:id", async (req, res) => {
